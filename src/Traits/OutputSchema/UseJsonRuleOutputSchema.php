@@ -159,9 +159,8 @@ trait UseJsonRuleOutputSchema
      */
     public function bootUseJsonRuleOutputSchema(PendingAgentTask $pendingAgentTask): void
     {
-
         $this->outputSchema = $this->resolveOutputSchema();
-        $this->middleware()->onStartTask(fn () => $this->setOutputSchema($pendingAgentTask), 'outputSchema');
+        $this->middleware()->onBootTask(fn () => $this->setOutputSchema($pendingAgentTask), 'outputSchema');
         $this->middleware()->onCompleteTask(fn (AgentTaskResponse $response) => $this->validateOutputSchema($response), 'outputSchema');
     }
 }

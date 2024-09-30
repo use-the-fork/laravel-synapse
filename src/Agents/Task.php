@@ -6,18 +6,24 @@
 
 
     use UseTheFork\Synapse\Agents\Enums\PromptType;
+    use UseTheFork\Synapse\Contracts\Agent\Task\HasMemory;
+    use UseTheFork\Synapse\Contracts\Tools\Tool;
     use UseTheFork\Synapse\Exceptions\InvalidArgumentException;
     use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
+    use UseTheFork\Synapse\Traits\Agent\Task\UseMemory;
+    use UseTheFork\Synapse\Traits\Agent\Task\UseTools;
     use UseTheFork\Synapse\Traits\Bootable;
     use UseTheFork\Synapse\Traits\Makeable;
     use UseTheFork\Synapse\ValueObject\Agent\Message;
     use UseTheFork\Synapse\ValueObject\Agent\Role;
 
-    abstract class Task
+    abstract class Task implements HasMemory
     {
         use Bootable;
         use Makeable;
         use HasMiddleware;
+        use UseMemory;
+        use UseTools;
 
         /**
          * The view to use when generating the prompt for this agent
@@ -28,6 +34,11 @@
          * The view to use when generating the prompt for this agent.
          */
         abstract public function resolvePromptView(): string;
+
+        /**
+         * @return array<Tool>
+ */
+        abstract public function resolveTools(): array;
 
         public function compilePrompt(array $inputs): array
         {
@@ -80,10 +91,10 @@
                 ];
                 if ($tool) {
                     $tool = json_decode(base64_decode($tool), true);
-                    $messageData['tool_call_id'] = $tool['id'];
-                    $messageData['tool_name'] = $tool['name'] ?? null;
-                    $messageData['tool_arguments'] = $tool['arguments'] ?? null;
-                    $messageData['tool_content'] = $tool['content'] ?? null;
+                    $messageData['tool_call_id'] = $tool['tool_call_id'];
+                    $messageData['tool_name'] = $tool['tool_name'] ?? null;
+                    $messageData['tool_arguments'] = $tool['tool_arguments'] ?? null;
+                    $messageData['tool_content'] = $tool['tool_content'] ?? null;
                 }
                 if ($image) {
                     $image = json_decode(base64_decode($image), true);

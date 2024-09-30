@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
+use UseTheFork\Synapse\Contracts\Tools\Tool;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\BaseTool;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 use UseTheFork\Synapse\Tools\SerperTool;
 

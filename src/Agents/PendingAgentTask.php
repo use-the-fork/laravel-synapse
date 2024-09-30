@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Agents;
 
 use Throwable;
-use UseTheFork\Synapse\Agents\Enums\ResponseType;
 use UseTheFork\Synapse\Agents\PendingAgentTask\BootAgentAndTask;
 use UseTheFork\Synapse\Agents\PendingAgentTask\BootTraits;
 use UseTheFork\Synapse\Agents\PendingAgentTask\MergeProperties;
-use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
-use UseTheFork\Synapse\ValueObject\Agent\Response;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
 
 class PendingAgentTask
 {
-    public $integration;
-    public $registered_tools;
     use HasMiddleware;
 
     /**
@@ -25,6 +21,8 @@ class PendingAgentTask
     protected Agent $agent;
 
     protected Task $task;
+
+    protected ?AgentTaskResponse $currentTaskResponse = null;
 
     protected array $input;
 
@@ -57,54 +55,6 @@ class PendingAgentTask
     }
 
     /**
-     * Handles the user input and extra agent arguments to retrieve the response.
-     *
-     * @param  array|null  $input  The input array.
-     * @param  array|null  $extraAgentArgs  The extra agent arguments array.
-     * @return array The validated response array.
-     *
-     * @throws Throwable
-     */
-    public function handle(?array $input, ?array $extraAgentArgs = []): array
-    {
-        $response = $this->getAnswer($input, $extraAgentArgs);
-
-        $this->log('Start validation', [$response]);
-
-        return $this->doValidate($response);
-    }
-
-    /**
-     * @throws Throwable
-     */
-    protected function getAnswer(?array $input, ?array $extraAgentArgs = []): string
-    {
-        while (true) {
-            $this->loadMemory();
-
-            $prompt = $this->parsePrompt(
-                $this->getPrompt($input)
-            );
-
-            $this->log('Call Integration');
-
-            // Create the Chat request we will be sending.
-            $chatResponse = $this->integration->handleCompletion($prompt, $this->registered_tools, $extraAgentArgs);
-            $this->log("Finished Integration with {$chatResponse->finishReason()}");
-
-            switch ($chatResponse->finishReason()) {
-                case ResponseType::TOOL_CALL:
-                    $this->handleTools($chatResponse);
-                    break;
-                case ResponseType::STOP:
-                    return $chatResponse->content();
-                default:
-                    throw new UnknownFinishReasonException("{$chatResponse->finishReason()} is not a valid finish reason.");
-            }
-        }
-    }
-
-    /**
      * Execute the Complete Task pipeline.
      */
     public function executeCompleteTaskPipeline(AgentTaskResponse $response): AgentTaskResponse
@@ -112,12 +62,44 @@ class PendingAgentTask
         return $this->middleware()->executeCompleteTaskPipeline($response);
     }
 
+    public function executeStartIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        return $this->middleware()->executeStartIterationPipeline($pendingAgentTask);
+    }
+
+    public function executeEndIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        return $this->middleware()->executeEndIterationPipeline($pendingAgentTask);
+    }
+
+    public function setCurrentTaskResponse(AgentTaskResponse $currentTaskResponse): PendingAgentTask
+    {
+        $this->currentTaskResponse = $currentTaskResponse;
+
+        return $this;
+    }
+
+    public function currentTaskResponse(): ?AgentTaskResponse
+    {
+        return $this->currentTaskResponse;
+    }
+
     /**
      * Get the task.
      */
-    public function addInput($key, $value): self
+    public function addInput($key, $value): PendingAgentTask
     {
         $this->input[$key] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get the task.
+     */
+    public function addMemory(Message $messageData): PendingAgentTask
+    {
+        $this->getTask()->memory()->add($messageData);
 
         return $this;
     }
@@ -132,7 +114,7 @@ class PendingAgentTask
 
     public function getTools(): array
     {
-        return [];
+        return $this->task->tools();
     }
 
     public function getExtraAgentArgs(): array

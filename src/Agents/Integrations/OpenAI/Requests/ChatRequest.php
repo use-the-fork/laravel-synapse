@@ -10,9 +10,7 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Agents\AgentTaskResponse;
-use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 use UseTheFork\Synapse\ValueObject\Agent\Message;
-use UseTheFork\Synapse\ValueObject\Agent\Response as IntegrationResponse;
 use UseTheFork\Synapse\ValueObject\Agent\Role;
 
 class ChatRequest extends Request implements HasBody
@@ -42,6 +40,7 @@ class ChatRequest extends Request implements HasBody
         ];
 
         $toolCalls = [];
+
         if ($this->tools !== []) {
             foreach ($this->tools as $tool) {
                 $payload['tools'][] = $tool['definition'];
@@ -87,6 +86,7 @@ class ChatRequest extends Request implements HasBody
     private function formatToolMessage(Message $message): array
     {
         $message = $message->toArray();
+
 
         $payload = [];
         $payload[] = [
@@ -139,7 +139,12 @@ class ChatRequest extends Request implements HasBody
         $message = $data['choices'][0]['message'] ?? [];
         $message['finish_reason'] = $data['choices'][0]['finish_reason'] ?? '';
         if (isset($message['tool_calls'])) {
-            $message['tool_call'] = ToolCallValueObject::make($message['tool_calls'][0])->toArray();
+
+
+
+            $message['tool_call_id'] = $message['tool_calls'][0]['id'];
+            $message['tool_name'] = $message['tool_calls'][0]['function']['name'];
+            $message['tool_arguments'] = $message['tool_calls'][0]['function']['arguments'];
             unset($message['tool_calls']);
 
             // Open AI sends a tool call via assistant role. We change it to tool here to make processing easier.
@@ -147,7 +152,7 @@ class ChatRequest extends Request implements HasBody
         }
 
         return new AgentTaskResponse(
-            response: IntegrationResponse::makeOrNull($message),
+            response: Message::makeOrNull($message),
             rawResponse: $response->body()
         );
     }

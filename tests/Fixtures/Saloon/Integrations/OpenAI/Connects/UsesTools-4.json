@@ -1,0 +1,10 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 30 Sep 2024 18:16:06 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-ADFEBYDfFXB4Ubf6QLR1m0VwbAYYt\",\n  \"object\": \"chat.completion\",\n  \"created\": 1727720163,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"The current President of the United States is Joe Biden. He has been serving as the 46th President since January 20, 2021. For more information, you can visit [The White House](https:\/\/www.whitehouse.gov\/administration\/president-biden\/) or [Joe Biden's Wikipedia page](https:\/\/en.wikipedia.org\/wiki\/Joe_Biden).\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 840,\n    \"completion_tokens\": 75,\n    \"total_tokens\": 915,\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_22b855c4b7\"\n}\n"
+}

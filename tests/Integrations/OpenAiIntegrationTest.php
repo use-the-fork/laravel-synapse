@@ -6,17 +6,17 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agents\Agent;
-    use UseTheFork\Synapse\Agents\AgentTaskResponse;
-    use UseTheFork\Synapse\Agents\Enums\PromptType;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
+use UseTheFork\Synapse\Agents\Enums\PromptType;
+use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
 use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Agents\Task;
-    use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
-    use UseTheFork\Synapse\Contracts\OutputSchema\HasTools;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
-    use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
-    use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Agents\Task;
+use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\Traits\Memory\UseCollectionMemory;
+use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
+use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
 test('Connects', function (): void {
 
@@ -24,12 +24,13 @@ test('Connects', function (): void {
     {
         public function resolveIntegration(): OpenAIConnector
         {
-            return new OpenAIConnector();
+            return new OpenAIConnector;
         }
     }
 
-    class OpenAiTestTask  extends Task implements HasTools
+    class OpenAiTestTask extends Task implements HasOutputSchema
     {
+        use UseCollectionMemory;
         use UseJsonRuleOutputSchema;
 
         protected PromptType $promptType = PromptType::CHAT;
@@ -43,11 +44,16 @@ test('Connects', function (): void {
         {
             return [
                 SchemaRule::make([
-                                     'name' => 'answer',
-                                     'rules' => 'required|string',
-                                     'description' => 'your final answer to the query.',
-                                 ]),
+                    'name' => 'answer',
+                    'rules' => 'required|string',
+                    'description' => 'your final answer to the query.',
+                ]),
             ];
+        }
+
+        public function resolveTools(): array
+        {
+            return [];
         }
     }
 
@@ -56,7 +62,7 @@ test('Connects', function (): void {
     ]);
 
     $agent = new OpenAiTestAgent;
-    $task = new OpenAiTestTask();
+    $task = new OpenAiTestTask;
     $agentResponse = $agent->invoke(['input' => 'hello!'], $task);
 
     expect($agentResponse)->toBeInstanceOf(AgentTaskResponse::class)
@@ -65,16 +71,15 @@ test('Connects', function (): void {
 
 test('Uses Tools', function (): void {
 
-
     class OpenAiTestAgent extends Agent
     {
         public function resolveIntegration(): OpenAIConnector
         {
-            return new OpenAIConnector();
+            return new OpenAIConnector;
         }
     }
 
-    class OpenAiTestToolTask  extends Task implements HasOutputSchema
+    class OpenAiTestToolTask extends Task implements HasOutputSchema
     {
         use UseJsonRuleOutputSchema;
 
@@ -89,21 +94,20 @@ test('Uses Tools', function (): void {
         {
             return [
                 SchemaRule::make([
-                                     'name' => 'answer',
-                                     'rules' => 'required|string',
-                                     'description' => 'your final answer to the query.',
-                                 ]),
+                    'name' => 'answer',
+                    'rules' => 'required|string',
+                    'description' => 'your final answer to the query.',
+                ]),
             ];
         }
 
-        protected function resolveTools(): array
+        public function resolveTools(): array
         {
             return [
                 new SerperTool,
             ];
         }
     }
-
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
@@ -115,9 +119,8 @@ test('Uses Tools', function (): void {
     ]);
 
     $agent = new OpenAiTestAgent;
-    $task = new OpenAiTestToolTask();
+    $task = new OpenAiTestToolTask;
     $agentResponse = $agent->invoke(['input' => 'search google for the current president of the united states.'], $task);
-
 
     expect($agentResponse)->toBeArray()
         ->and($agentResponse)->toHaveKey('answer');

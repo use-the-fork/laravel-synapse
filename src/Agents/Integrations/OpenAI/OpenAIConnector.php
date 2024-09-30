@@ -35,9 +35,12 @@ class OpenAIConnector extends Connector implements HasIntegration
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleCompletion(PendingAgentTask $pendingAgentTask): AgentTaskResponse
+    public function handleCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
-        return $this->send(new ChatRequest($pendingAgentTask->getTask()->compilePrompt($pendingAgentTask->getInputs()), $pendingAgentTask->getTools(), $pendingAgentTask->getExtraAgentArgs()))->dto();
+        $result =  $this->send(new ChatRequest($pendingAgentTask->getTask()->compilePrompt($pendingAgentTask->getInputs()), $pendingAgentTask->getTools(), $pendingAgentTask->getExtraAgentArgs()))->dto();
+        $pendingAgentTask->setCurrentTaskResponse($result);
+
+        return $pendingAgentTask;
     }
 
     /**
@@ -50,7 +53,7 @@ class OpenAIConnector extends Connector implements HasIntegration
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): AgentTaskResponse
+    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
         return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }

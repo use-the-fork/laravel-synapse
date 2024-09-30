@@ -1,0 +1,11 @@
+{
+  "statusCode": 200,
+  "headers": {
+    "Date": "Mon, 30 Sep 2024 14:02:28 GMT",
+    "Content-Type": "application/json",
+    "Transfer-Encoding": "chunked",
+    "Connection": "keep-alive",
+    "access-control-expose-headers": "X-Request-ID"
+  },
+  "data": "{\n  \"id\": \"chatcmpl-ADBGl9Rq6i0WCzuuxMWTWHax4sD7D\",\n  \"object\": \"chat.completion\",\n  \"created\": 1727704947,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n            \"id\": \"call_LD4rRyyEYKNVr4Am0aYqQD0d\",\n            \"type\": \"function\",\n            \"function\": {\n              \"name\": \"serper_tool\",\n              \"arguments\": \"{\\\"query\\\":\\\"current president of the United States\\\",\\\"searchType\\\":\\\"search\\\",\\\"numberOfResults\\\":10}\"\n            }\n          }\n        ],\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 178,\n    \"completion_tokens\": 30,\n    \"total_tokens\": 208,\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_68a5bb159e\"\n}\n"
+}

@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
-use UseTheFork\Synapse\Tools\BaseTool;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
-use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
-use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use UseTheFork\Synapse\Contracts\Tools\Tool;
+    use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
+    use UseTheFork\Synapse\Tools\BaseTool;
+    use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
+    use UseTheFork\Synapse\Tools\SerpAPIGoogleNewsTool;
 
-test('Requires API Key', function () {
+    test('Requires API Key', function () {
     $tool = new SerpAPIGoogleNewsTool;
     $tool->handle('current President of the United States');
 })->throws(MissingApiKeyException::class);

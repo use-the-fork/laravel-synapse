@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
+use UseTheFork\Synapse\Contracts\Tools\Tool;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
 use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
 use UseTheFork\Synapse\Tools\Attributes\Description;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Useful for getting the contents of a webpage.')]
@@ -31,7 +31,7 @@ final class FirecrawlTool extends BaseTool implements Tool
             return;
         }
 
-        if ((!isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.firecrawl.key'))) {
+        if ((! isset($this->apiKey) || ($this->apiKey === '' || $this->apiKey === '0')) && ! empty(config('synapse.services.firecrawl.key'))) {
             $this->apiKey = config('synapse.services.firecrawl.key');
 
             return;

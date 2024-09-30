@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
+use UseTheFork\Synapse\Contracts\Tools\Tool;
 use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Services\Serper\SerperConnector;
 use UseTheFork\Synapse\Tools\Attributes\Description;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 
 #[Description('Search Google using a query.')]

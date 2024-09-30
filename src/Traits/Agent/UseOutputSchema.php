@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Agent;
 
-use UseTheFork\Synapse\Contracts\OutputSchema\HasTools;
+use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
 
 trait UseOutputSchema
 {
@@ -16,12 +16,12 @@ trait UseOutputSchema
     /**
      * The request sender.
      */
-    protected HasTools $outputSchema;
+    protected HasOutputSchema $outputSchema;
 
     /**
      * Manage the request sender.
      */
-    public function outputSchema(): HasTools
+    public function outputSchema(): HasOutputSchema
     {
         return $this->outputSchema ??= $this->defaultOutputSchema();
     }
@@ -29,7 +29,7 @@ trait UseOutputSchema
     /**
      * Define the default request sender.
      */
-    protected function defaultOutputSchema(): HasTools
+    protected function defaultOutputSchema(): HasOutputSchema
     {
         if (empty($this->defaultOutputSchema)) {
             return Config::getDefaultSender();

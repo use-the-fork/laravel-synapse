@@ -15,7 +15,7 @@ use UseTheFork\Synapse\Agents\Integrations\Claude\Requests\ValidateOutputRequest
 use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Agents\Integrations\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Agents\Integrations\ValueObjects\EmbeddingResponse;
-use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\Contracts\Tools\Tool;
 use UseTheFork\Synapse\ValueObject\Agent\Message;
 use UseTheFork\Synapse\ValueObject\Agent\Response;
 

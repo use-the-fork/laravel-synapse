@@ -13,6 +13,14 @@ use UseTheFork\Synapse\ValueObject\Agent\Response;
 class MiddlewarePipeline
 {
     /**
+     * Boot Task Pipeline
+     */
+    protected Pipeline $bootTaskPipeline;
+
+    protected Pipeline $startIterationPipeline;
+    protected Pipeline $endIterationPipeline;
+
+    /**
      * Start Task Pipeline
      */
     protected Pipeline $startTaskPipeline;
@@ -32,12 +40,72 @@ class MiddlewarePipeline
      */
     public function __construct()
     {
+        $this->bootTaskPipeline = new Pipeline;
+
+        $this->startIterationPipeline = new Pipeline;
+        $this->endIterationPipeline = new Pipeline;
+
+
         $this->startTaskPipeline = new Pipeline;
         $this->completeTaskPipeline = new Pipeline;
+
         $this->fatalPipeline = new Pipeline;
     }
 
     /**
+     * Add a middleware before the task starts
+     *
+     * @param  callable(PendingAgentTask): (PendingAgentTask|void)  $callable
+     * @return $this
+     */
+    public function onBootTask(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    {
+        $this->bootTaskPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
+            $result = $callable($pendingAgentTask);
+
+            if ($result instanceof PendingAgentTask) {
+                return $result;
+            }
+
+            return $pendingAgentTask;
+        }, $name, $order);
+
+        return $this;
+    }
+
+
+    public function onStartIteration(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    {
+        $this->startIterationPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
+            $result = $callable($pendingAgentTask);
+
+            if ($result instanceof PendingAgentTask) {
+                return $result;
+            }
+
+            return $pendingAgentTask;
+        }, $name, $order);
+
+        return $this;
+    }
+
+    public function onEndIteration(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    {
+        $this->endIterationPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
+            $result = $callable($pendingAgentTask);
+
+            if ($result instanceof PendingAgentTask) {
+                return $result;
+            }
+
+            return $pendingAgentTask;
+        }, $name, $order);
+
+        return $this;
+    }
+
+    /**
+     *
      * Add a middleware before the task starts
      *
      * @param  callable(PendingAgentTask): (PendingAgentTask|void)  $callable
@@ -112,12 +180,23 @@ class MiddlewarePipeline
         return $this;
     }
 
+
     /**
      * Process the request pipeline.
      */
     public function executeStartTaskPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
     {
         return $this->startTaskPipeline->process($pendingAgentTask);
+    }
+
+    public function executeStartIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        return $this->startIterationPipeline->process($pendingAgentTask);
+    }
+
+    public function executeEndIterationPipeline(PendingAgentTask $pendingAgentTask): PendingAgentTask
+    {
+        return $this->endIterationPipeline->process($pendingAgentTask);
     }
 
     /**
@@ -145,6 +224,16 @@ class MiddlewarePipeline
      */
     public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
+        $startIterationPipes = array_merge(
+            $this->getStartIterationPipeline()->getPipes(),
+            $middlewarePipeline->getStartIterationPipeline()->getPipes()
+        );
+
+        $endIterationPipes = array_merge(
+            $this->getEndIterationPipeline()->getPipes(),
+            $middlewarePipeline->getEndIterationPipeline()->getPipes()
+        );
+
         $startTaskPipes = array_merge(
             $this->getStartTaskPipelinePipeline()->getPipes(),
             $middlewarePipeline->getStartTaskPipelinePipeline()->getPipes()
@@ -160,11 +249,25 @@ class MiddlewarePipeline
             $middlewarePipeline->getFatalPipeline()->getPipes()
         );
 
+        $this->startIterationPipeline->setPipes($startIterationPipes);
+        $this->endIterationPipeline->setPipes($endIterationPipes);
+
+        $this->startTaskPipeline->setPipes($startTaskPipes);
         $this->startTaskPipeline->setPipes($startTaskPipes);
         $this->completeTaskPipeline->setPipes($completeTaskPipes);
         $this->fatalPipeline->setPipes($fatalPipes);
 
         return $this;
+    }
+
+    public function getStartIterationPipeline(): Pipeline
+    {
+        return $this->startIterationPipeline;
+    }
+
+    public function getEndIterationPipeline(): Pipeline
+    {
+        return $this->endIterationPipeline;
     }
 
     /**

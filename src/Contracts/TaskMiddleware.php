@@ -13,5 +13,5 @@
          *
          * @return PendingAgentTask|void
          */
-        public function __invoke(PendingAgentTask $pendingRequest);
+        public function __invoke(PendingAgentTask $pendingAgentTask);
     }

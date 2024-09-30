@@ -8,6 +8,7 @@ use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 use UseTheFork\Synapse\Traits\Agent\InvokesRequests;
 use UseTheFork\Synapse\Traits\Bootable;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
 use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 class AgentTaskResponse
@@ -15,7 +16,7 @@ class AgentTaskResponse
     protected mixed $finalResponse;
 
     public function __construct(
-        public Response $response,
+        public Message $response,
         public string $rawResponse,
     ) {
         $this->finalResponse = $this->rawResponse;
@@ -35,6 +36,29 @@ class AgentTaskResponse
     public function getFinalResponse(): mixed
     {
         return $this->finalResponse;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFinishReason(): string
+    {
+        return $this->response->finishReason();
+    }
+
+    public function role(): string
+    {
+        return $this->response->role();
+    }
+
+    public function content(): string|null
+    {
+        return $this->response->content();
+    }
+
+    public function response(): array
+    {
+        return $this->response->toArray();
     }
 
 }
