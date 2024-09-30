@@ -9,10 +9,10 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
-use UseTheFork\Synapse\Agents\Enums\Role;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Response as IntegrationResponse;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response as IntegrationResponse;
+use UseTheFork\Synapse\ValueObject\Agent\Role;
 
 class ChatRequest extends Request implements HasBody
 {

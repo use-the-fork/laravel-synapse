@@ -14,10 +14,10 @@ use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
 use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\EmbeddingsRequest;
 use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ValidateOutputRequest;
 use UseTheFork\Synapse\Agents\Integrations\ValueObjects\EmbeddingResponse;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Response;
 use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/OpenAI/OpenAIConnector.php
 class OpenAIConnector extends Connector implements HasIntegration
@@ -30,24 +30,27 @@ class OpenAIConnector extends Connector implements HasIntegration
 
     /**
      * Handles the request to generate a chat response.
+     *
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleCompletion(PendingAgentTask $pendingAgentTask): Response {
+    public function handleCompletion(PendingAgentTask $pendingAgentTask): Response
+    {
         return $this->send(new ChatRequest($pendingAgentTask->getTask()->compilePrompt($pendingAgentTask->getInputs()), $pendingAgentTask->getTools(), $pendingAgentTask->getExtraAgentArgs()))->dto();
     }
 
     /**
      * Forces a model to output its response in a specific format.
      *
-     * @param Message $message The chat message that is used for validation.
+     * @param  Message  $message  The chat message that is used for validation.
      * @param  array  $extraAgentArgs  Extra arguments to be passed to the agent.
      * @return Response The response from the chat request.
      *
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): Response {
+    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): Response
+    {
         return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }
 

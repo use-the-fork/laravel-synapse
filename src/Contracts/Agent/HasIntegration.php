@@ -6,7 +6,7 @@
 
 
     use UseTheFork\Synapse\Agents\PendingAgentTask;
-    use UseTheFork\Synapse\Agents\Response;
+    use UseTheFork\Synapse\ValueObject\Agent\Response;
 
     interface HasIntegration
     {

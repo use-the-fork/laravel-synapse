@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Traits\Memory;
 
 use Illuminate\Support\Collection;
-use UseTheFork\Synapse\Agents\Enums\Role;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Role;
 
 trait UseCollectionMemory
 {

@@ -6,10 +6,10 @@ namespace UseTheFork\Synapse\Traits\OutputSchema;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Agents\Response;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
 use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
 /**

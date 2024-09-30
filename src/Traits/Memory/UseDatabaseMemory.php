@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Traits\Memory;
 
-use UseTheFork\Synapse\Agents\Enums\Role;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
 use UseTheFork\Synapse\Agents\Models\Memory\AgentMemory;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Role;
 
 trait UseDatabaseMemory
 {

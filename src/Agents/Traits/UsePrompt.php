@@ -6,10 +6,10 @@ namespace UseTheFork\Synapse\Agents\Traits;
 
 
 use InvalidArgumentException;
-use UseTheFork\Synapse\Agents\Enums\PromptType;
-use UseTheFork\Synapse\Agents\Enums\Role;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
 use Throwable;
+use UseTheFork\Synapse\Agents\Enums\PromptType;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Role;
 
 trait UsePrompt
 {

@@ -15,9 +15,9 @@ use UseTheFork\Synapse\Agents\Integrations\Claude\Requests\ValidateOutputRequest
 use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;
 use UseTheFork\Synapse\Agents\Integrations\Exceptions\NotImplementedException;
 use UseTheFork\Synapse\Agents\Integrations\ValueObjects\EmbeddingResponse;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/Claude/ClaudeAIConnector.php
 class ClaudeAIConnector extends Connector implements Integration

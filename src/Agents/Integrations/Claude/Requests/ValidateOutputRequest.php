@@ -10,8 +10,8 @@ use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
 use UseTheFork\Synapse\Agents\Enums\ResponseType;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Response as IntegrationResponse;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response as IntegrationResponse;
 
 class ValidateOutputRequest extends Request implements HasBody
 {

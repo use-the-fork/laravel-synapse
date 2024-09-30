@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
     use UseTheFork\Synapse\Agents\Agent;
+    use UseTheFork\Synapse\Agents\Enums\PromptType;
     use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
     use UseTheFork\Synapse\Agents\Task;
     use UseTheFork\Synapse\Contracts\Memory\HasMemory;
@@ -22,11 +23,14 @@ declare(strict_types=1);
 		}
 	}
 
-    class CollectionMemoryTask extends Task implements HasMemory, HasOutputSchema
+    class CollectionMemoryTask extends Task
     {
+        //implements  HasOutputSchema
 
-        use UseCollectionMemory;
-        use UseJsonRuleOutputSchema;
+//        use UseCollectionMemory;
+//        use UseJsonRuleOutputSchema;
+
+        protected PromptType $promptType = PromptType::COMPLETION;
 
 		public function resolvePromptView(): string
 		{

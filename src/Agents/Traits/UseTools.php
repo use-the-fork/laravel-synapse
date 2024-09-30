@@ -11,9 +11,9 @@ use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Response;
 use UseTheFork\Synapse\Tools\Attributes\Description;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 trait UseTools
 {

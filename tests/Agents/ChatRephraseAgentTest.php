@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\Enums\ResponseType;
-use UseTheFork\Synapse\Agents\Enums\Role;
-use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
-use UseTheFork\Synapse\Templates\ChatRephraseAgent;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\Enums\ResponseType;
+    use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Templates\ChatRephraseAgent;
+    use UseTheFork\Synapse\ValueObject\Agent\Message;
+    use UseTheFork\Synapse\ValueObject\Agent\Role;
 
-it('can run the Chat Rephrase Agent.', function (): void {
+    it('can run the Chat Rephrase Agent.', function (): void {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Contracts\Memory;
 
-use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Message;
 
 interface HasMemory
 {

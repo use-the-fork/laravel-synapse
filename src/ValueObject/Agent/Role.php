@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Agents\Enums;
+namespace UseTheFork\Synapse\ValueObject\Agent;
 
 final class Role
 {
