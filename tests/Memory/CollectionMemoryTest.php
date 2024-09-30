@@ -23,19 +23,18 @@ declare(strict_types=1);
 		}
 	}
 
-    class CollectionMemoryTask extends Task
+    class CollectionMemoryTask extends Task implements HasOutputSchema
     {
-        //implements  HasOutputSchema
 
 //        use UseCollectionMemory;
-//        use UseJsonRuleOutputSchema;
+        use UseJsonRuleOutputSchema;
 
         protected PromptType $promptType = PromptType::COMPLETION;
 
-		public function resolvePromptView(): string
-		{
-			return 'synapse::Prompts.SimplePrompt';
-		}
+        public function resolvePromptView(): string
+        {
+            return 'synapse::Prompts.SimplePrompt';
+        }
 
         public function resolveOutputSchema(): array
         {

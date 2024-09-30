@@ -15,7 +15,7 @@ interface HasOutputSchema
      *
      * @return array<SchemaRule> The registered rules.
      */
-    public function resolveOutputSchema(): array;
+    public function defaultOutputSchema(): array;
 
     public function setOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 
