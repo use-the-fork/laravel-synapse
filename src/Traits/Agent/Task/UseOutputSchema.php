@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace UseTheFork\Synapse\Traits\Agent;
+namespace UseTheFork\Synapse\Traits\Agent\Task;
 
-use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+use UseTheFork\Synapse\Contracts\OutputSchema;
+use UseTheFork\Synapse\Traits\Agent\Config;
 
 trait UseOutputSchema
 {
@@ -16,12 +17,12 @@ trait UseOutputSchema
     /**
      * The request sender.
      */
-    protected HasOutputSchema $outputSchema;
+    protected OutputSchema $outputSchema;
 
     /**
      * Manage the request sender.
      */
-    public function outputSchema(): HasOutputSchema
+    public function outputSchema(): OutputSchema
     {
         return $this->outputSchema ??= $this->defaultOutputSchema();
     }
@@ -29,7 +30,7 @@ trait UseOutputSchema
     /**
      * Define the default request sender.
      */
-    protected function defaultOutputSchema(): HasOutputSchema
+    protected function defaultOutputSchema(): OutputSchema
     {
         if (empty($this->defaultOutputSchema)) {
             return Config::getDefaultSender();

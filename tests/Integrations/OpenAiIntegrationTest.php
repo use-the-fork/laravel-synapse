@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\Agent;
-use UseTheFork\Synapse\Agents\AgentTaskResponse;
-use UseTheFork\Synapse\Agents\Enums\PromptType;
-use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
-use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Agents\Task;
-use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\Traits\Memory\UseCollectionMemory;
-use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
-use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\Agent;
+    use UseTheFork\Synapse\Agents\AgentTaskResponse;
+    use UseTheFork\Synapse\Agents\Enums\PromptType;
+    use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
+    use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Agents\Task;
+    use UseTheFork\Synapse\Contracts\Agent\Task\HasOutputSchema;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\Traits\Memory\UseCollectionMemory;
+    use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
+    use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
-test('Connects', function (): void {
+    test('Connects', function (): void {
 
     class OpenAiTestAgent extends Agent
     {

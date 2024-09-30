@@ -12,12 +12,12 @@ use UseTheFork\Synapse\Contracts\Memory;
 trait UseMemory
 {
     /**
-     * The request sender.
+     * The Memory
      */
     protected Memory $memory;
 
     /**
-     * Manage the request sender.
+     * gets the Tasks Memory.
      */
     public function memory(): Memory
     {
@@ -29,11 +29,11 @@ trait UseMemory
      */
     public function resolveMemory(): Memory
     {
-        if (empty($this->defaultOutputSchema)) {
+        if (empty($this->memory)) {
             return Config::getDefaultMemory();
         }
 
-        return new $this->defaultOutputSchema;
+        return new $this->memory;
     }
 
     public function bootUseMemory(): void

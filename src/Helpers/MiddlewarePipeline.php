@@ -18,6 +18,7 @@ class MiddlewarePipeline
     protected Pipeline $bootTaskPipeline;
 
     protected Pipeline $startIterationPipeline;
+
     protected Pipeline $endIterationPipeline;
 
     /**
@@ -40,39 +41,15 @@ class MiddlewarePipeline
      */
     public function __construct()
     {
-        $this->bootTaskPipeline = new Pipeline;
 
         $this->startIterationPipeline = new Pipeline;
         $this->endIterationPipeline = new Pipeline;
-
 
         $this->startTaskPipeline = new Pipeline;
         $this->completeTaskPipeline = new Pipeline;
 
         $this->fatalPipeline = new Pipeline;
     }
-
-    /**
-     * Add a middleware before the task starts
-     *
-     * @param  callable(PendingAgentTask): (PendingAgentTask|void)  $callable
-     * @return $this
-     */
-    public function onBootTask(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
-    {
-        $this->bootTaskPipeline->pipe(static function (PendingAgentTask $pendingAgentTask) use ($callable): PendingAgentTask {
-            $result = $callable($pendingAgentTask);
-
-            if ($result instanceof PendingAgentTask) {
-                return $result;
-            }
-
-            return $pendingAgentTask;
-        }, $name, $order);
-
-        return $this;
-    }
-
 
     public function onStartIteration(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
@@ -105,7 +82,6 @@ class MiddlewarePipeline
     }
 
     /**
-     *
      * Add a middleware before the task starts
      *
      * @param  callable(PendingAgentTask): (PendingAgentTask|void)  $callable
@@ -179,7 +155,6 @@ class MiddlewarePipeline
 
         return $this;
     }
-
 
     /**
      * Process the request pipeline.
