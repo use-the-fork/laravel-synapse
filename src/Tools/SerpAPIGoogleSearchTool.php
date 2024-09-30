@@ -6,9 +6,9 @@ namespace UseTheFork\Synapse\Tools;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\SerpApi\Requests\SerpApiSearchRequest;
 use UseTheFork\Synapse\Services\SerpApi\SerpApiConnector;
+use UseTheFork\Synapse\Tools\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 

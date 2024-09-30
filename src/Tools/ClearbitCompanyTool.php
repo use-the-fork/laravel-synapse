@@ -6,9 +6,9 @@ namespace UseTheFork\Synapse\Tools;
 
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
-use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\Clearbit\ClearbitConnector;
 use UseTheFork\Synapse\Services\Clearbit\Requests\ClearbitCompanyRequest;
+use UseTheFork\Synapse\Tools\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 

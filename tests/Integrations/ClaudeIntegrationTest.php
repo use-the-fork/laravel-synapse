@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Connector;
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agent;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\ClaudeAIConnector;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\Connectors\Claude\Requests\ValidateOutputRequest;
-use UseTheFork\Synapse\OutputSchema\ValueObjects\SchemaRule;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-use UseTheFork\Synapse\Tools\SerperTool;
+    use Saloon\Http\Connector;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use Saloon\Http\PendingRequest;
+    use UseTheFork\Synapse\Agents\Agent;
+    use UseTheFork\Synapse\Agents\Integrations\Claude\ClaudeAIConnector;
+    use UseTheFork\Synapse\Agents\Integrations\Claude\Requests\ChatRequest;
+    use UseTheFork\Synapse\Agents\Integrations\Claude\Requests\ValidateOutputRequest;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Tools\SerperTool;
+    use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
-test('Connects', function () {
+    test('Connects', function () {
 
     class ClaudeTestAgent extends Agent
     {

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\MultiQueryRetrieverAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+	use Saloon\Http\Faking\MockClient;
+	use Saloon\Http\Faking\MockResponse;
+	use Saloon\Http\PendingRequest;
+	use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+	use UseTheFork\Synapse\Templates\MultiQueryRetrieverAgent;
 
-it('can run the Multi Query Retriever Agent.', function () {
+	it('can run the Multi Query Retriever Agent.', function () {
 
     MockClient::global([
         ChatRequest::class => function (PendingRequest $pendingRequest) {

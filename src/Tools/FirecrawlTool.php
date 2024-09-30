@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Tools;
 
-use UseTheFork\Synapse\Attributes\Description;
 use UseTheFork\Synapse\Services\Firecrawl\FirecrawlConnector;
 use UseTheFork\Synapse\Services\Firecrawl\Requests\FirecrawlRequest;
+use UseTheFork\Synapse\Tools\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Tools\Exceptions\MissingApiKeyException;
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace UseTheFork\Synapse\Tools;
 
 use Saloon\Http\Connector;
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Tools\Attributes\Description;
 use UseTheFork\Synapse\Tools\Contracts\Tool;
 use UseTheFork\Synapse\Utilities\Concerns\HasLogging;
 

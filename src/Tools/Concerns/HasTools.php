@@ -12,7 +12,7 @@ use ReflectionClass;
 use ReflectionEnum;
 use ReflectionException;
 use ReflectionParameter;
-use UseTheFork\Synapse\Attributes\Description;
+use UseTheFork\Synapse\Tools\Attributes\Description;
 
 /**
  * Trait HasTools

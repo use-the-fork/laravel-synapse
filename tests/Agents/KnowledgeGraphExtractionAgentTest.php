@@ -2,25 +2,17 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\ChatRephraseAgent;
-    use UseTheFork\Synapse\Agents\KnowledgeGraphExtractionAgent;
-    use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\Enums\ResponseType;
-use UseTheFork\Synapse\Integrations\Enums\Role;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Templates\KnowledgeGraphExtractionAgent;
 
-it('can run the Knowledge Graph Extraction Agent.', function () {
+it('can run the Knowledge Graph Extraction Agent.', function (): void {
 
-//    MockClient::global([
-//        ChatRequest::class => function (PendingRequest $pendingRequest) {
-//            $count = count($pendingRequest->body()->get('messages'));
-//
-//            return MockResponse::fixture("agents/chat-rephrase-agent/message-{$count}");
-//        },
-//    ]);
+    //    MockClient::global([
+    //        ChatRequest::class => function (PendingRequest $pendingRequest) {
+    //            $count = count($pendingRequest->body()->get('messages'));
+    //
+    //            return MockResponse::fixture("agents/chat-rephrase-agent/message-{$count}");
+    //        },
+    //    ]);
 
     $agent = new KnowledgeGraphExtractionAgent;
 

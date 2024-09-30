@@ -5,16 +5,16 @@ declare(strict_types=1);
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
-use UseTheFork\Synapse\Agents\ChatRephraseAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Integrations\Enums\ResponseType;
-use UseTheFork\Synapse\Integrations\Enums\Role;
-use UseTheFork\Synapse\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Agents\Enums\ResponseType;
+use UseTheFork\Synapse\Agents\Enums\Role;
+use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Agents\Integrations\ValueObjects\Message;
+use UseTheFork\Synapse\Templates\ChatRephraseAgent;
 
-it('can run the Chat Rephrase Agent.', function () {
+it('can run the Chat Rephrase Agent.', function (): void {
 
     MockClient::global([
-        ChatRequest::class => function (PendingRequest $pendingRequest) {
+        ChatRequest::class => function (PendingRequest $pendingRequest): \Saloon\Http\Faking\Fixture {
             $count = count($pendingRequest->body()->get('messages'));
 
             return MockResponse::fixture("agents/chat-rephrase-agent/message-{$count}");

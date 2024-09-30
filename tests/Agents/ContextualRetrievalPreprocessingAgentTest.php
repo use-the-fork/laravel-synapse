@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-use Saloon\Http\Faking\MockClient;
-use Saloon\Http\Faking\MockResponse;
-use UseTheFork\Synapse\Agents\ContextualRetrievalPreprocessingAgent;
-use UseTheFork\Synapse\Integrations\Connectors\OpenAI\Requests\ChatRequest;
+    use Saloon\Http\Faking\MockClient;
+    use Saloon\Http\Faking\MockResponse;
+    use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+    use UseTheFork\Synapse\Templates\ContextualRetrievalPreprocessingAgent;
 
-it('can run the Knowledge Graph Extraction Agent.', function () {
+    it('can run the Knowledge Graph Extraction Agent.', function () {
 
     MockClient::global([
         ChatRequest::class => MockResponse::fixture("agents/ContextualRetrievalPreprocessingAgent"),
