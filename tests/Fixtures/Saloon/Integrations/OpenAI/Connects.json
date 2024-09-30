@@ -1,0 +1,30 @@
+{
+    "statusCode": 200,
+    "headers": {
+        "Date": "Mon, 30 Sep 2024 12:20:47 GMT",
+        "Content-Type": "application\/json",
+        "Transfer-Encoding": "chunked",
+        "Connection": "keep-alive",
+        "access-control-expose-headers": "X-Request-ID",
+        "openai-organization": "user-5hvzt3x5aqwr0picqhxifwl8",
+        "openai-processing-ms": "588",
+        "openai-version": "2020-10-01",
+        "strict-transport-security": "max-age=31536000; includeSubDomains; preload",
+        "x-ratelimit-limit-requests": "10000",
+        "x-ratelimit-limit-tokens": "2000000",
+        "x-ratelimit-remaining-requests": "9999",
+        "x-ratelimit-remaining-tokens": "1999923",
+        "x-ratelimit-reset-requests": "6ms",
+        "x-ratelimit-reset-tokens": "2ms",
+        "x-request-id": "req_39c304959ef1b36aea6e4d96298861b3",
+        "CF-Cache-Status": "DYNAMIC",
+        "Set-Cookie": [
+            "__cf_bm=6IGpp7JmcbQlJGz7O89Yzz70WB6BxjUSR5ggyKiigI4-1727698847-1.0.1.1-GqteT2ixdhsBp6zthklfA006jGzEkcEi2RdG4rWCCeUaAohb9uHTA2mZRd1R3_u8jrwJNBig.CDLYXKlf0Wo8g; path=\/; expires=Mon, 30-Sep-24 12:50:47 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None",
+            "_cfuvid=OE.SYV2EsNMgPVb.aLHI4SKbWZyQc3UTEX0EWybtkyA-1727698847392-0.0.1.1-604800000; path=\/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None"
+        ],
+        "X-Content-Type-Options": "nosniff",
+        "Server": "cloudflare",
+        "CF-RAY": "8cb42b3f1f0359f8-IAD"
+    },
+    "data": "{\n  \"id\": \"chatcmpl-AD9gMwsmX9K3un0bmq3XieuMEtDLb\",\n  \"object\": \"chat.completion\",\n  \"created\": 1727698846,\n  \"model\": \"gpt-4-turbo-2024-04-09\",\n  \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\": \"assistant\",\n        \"content\": \"{\\n    \\\"answer\\\": \\\"Hello! How can I assist you today?\\\"\\n}\",\n        \"refusal\": null\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 61,\n    \"completion_tokens\": 16,\n    \"total_tokens\": 77,\n    \"completion_tokens_details\": {\n      \"reasoning_tokens\": 0\n    }\n  },\n  \"system_fingerprint\": \"fp_81dd8129df\"\n}\n"
+}

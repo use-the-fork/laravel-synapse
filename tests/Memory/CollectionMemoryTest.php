@@ -29,7 +29,7 @@ declare(strict_types=1);
 //        use UseCollectionMemory;
         use UseJsonRuleOutputSchema;
 
-        protected PromptType $promptType = PromptType::COMPLETION;
+        protected PromptType $promptType = PromptType::CHAT;
 
         public function resolvePromptView(): string
         {
@@ -50,7 +50,7 @@ declare(strict_types=1);
 
     $agent = new CollectionMemoryAgent;
     $task = new CollectionMemoryTask();
-    $agentResponse = $agent->invoke(['query' => 'hello this a test'], $task);
+    $agentResponse = $agent->invoke(['input' => 'hello this a test'], $task);
 
 
     expect($agentResponse)->toBeArray()

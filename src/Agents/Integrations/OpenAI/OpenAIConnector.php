@@ -36,6 +36,7 @@ class OpenAIConnector extends Connector implements HasIntegration
      */
     public function handleCompletion(PendingAgentTask $pendingAgentTask): Response
     {
+
         return $this->send(new ChatRequest($pendingAgentTask->getTask()->compilePrompt($pendingAgentTask->getInputs()), $pendingAgentTask->getTools(), $pendingAgentTask->getExtraAgentArgs()))->dto();
     }
 

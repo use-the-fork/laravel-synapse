@@ -21,11 +21,6 @@ trait UseJsonRuleOutputSchema
 
     protected array $outputSchema = [];
 
-    public function defaultOutputSchema(): array
-    {
-        throw new \Exception("TODO: Fix THIS");
-    }
-
     /**
      * Adds an output rule to the application.
      *
@@ -34,6 +29,11 @@ trait UseJsonRuleOutputSchema
     public function addOutputRule(SchemaRule $rule): void
     {
         $this->outputSchema[] = $rule;
+    }
+
+    public function resolveOutputSchema(): array
+    {
+        throw new \LogicException("You must set a `OutputSchema` please see `resolveOutputSchema` method.");
     }
 
     /**
@@ -118,9 +118,9 @@ trait UseJsonRuleOutputSchema
     /**
      * Retrieves the output rules as a JSON string.
      *
-     * @return string|null The output rules encoded as a JSON string. Returns null if there are no output rules.
+     * @return string The output rules encoded as a JSON string. Returns null if there are no output rules.
      */
-    public function defaultOutputSchema(): ?string
+    public function getOutputSchema(): string
     {
         $outputParserPromptPart = [];
         foreach ($this->outputSchema as $rule) {
@@ -154,7 +154,8 @@ trait UseJsonRuleOutputSchema
      */
     public function bootUseJsonRuleOutputSchema(PendingAgentTask $pendingAgentTask): void
     {
-        $this->outputSchema = $this->defaultOutputSchema();
+
+        $this->outputSchema = $this->resolveOutputSchema();
         $this->middleware()->onStartTask(fn() => $this->setOutputSchema($pendingAgentTask), 'outputSchema');
     }
 

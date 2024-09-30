@@ -6,35 +6,56 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Saloon\Http\PendingRequest;
 use UseTheFork\Synapse\Agents\Agent;
+    use UseTheFork\Synapse\Agents\Enums\PromptType;
 use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
-use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+    use UseTheFork\Synapse\Agents\Task;
+    use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
 use UseTheFork\Synapse\Tools\SerperTool;
-use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
+    use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
+    use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
+    use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
 
 test('Connects', function (): void {
 
     class OpenAiTestAgent extends Agent
     {
-        protected string $promptView = 'synapse::Prompts.SimplePrompt';
+        public function resolveIntegration(): OpenAIConnector
+        {
+            return new OpenAIConnector();
+        }
+    }
 
-        protected function registerOutputSchema(): array
+    class OpenAiTestTask  extends Task implements HasOutputSchema
+    {
+        use UseJsonRuleOutputSchema;
+
+        protected PromptType $promptType = PromptType::CHAT;
+
+        public function resolvePromptView(): string
+        {
+            return 'synapse::Prompts.SimplePrompt';
+        }
+
+        public function resolveOutputSchema(): array
         {
             return [
                 SchemaRule::make([
-                    'name' => 'answer',
-                    'rules' => 'required|string',
-                    'description' => 'your final answer to the query.',
-                ]),
+                                     'name' => 'answer',
+                                     'rules' => 'required|string',
+                                     'description' => 'your final answer to the query.',
+                                 ]),
             ];
         }
     }
 
     MockClient::global([
-        ChatRequest::class => MockResponse::fixture('openai/simple'),
+        ChatRequest::class => MockResponse::fixture('Integrations/OpenAI/Connects'),
     ]);
 
     $agent = new OpenAiTestAgent;
-    $agentResponse = $agent->handle(['input' => 'hello!']);
+    $task = new OpenAiTestTask();
+    $agentResponse = $agent->invoke(['input' => 'hello!'], $task);
 
     expect($agentResponse)->toBeArray()
         ->and($agentResponse)->toHaveKey('answer');

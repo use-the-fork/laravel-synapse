@@ -66,7 +66,7 @@
             // arrays based on the order type. We'll then merge the arrays.
 
             foreach ($this->pipes as $pipe) {
-                match ($pipe->order) {
+                match ($pipe->pipeOrder) {
                     PipeOrder::FIRST => $firstPipes[] = $pipe,
                     null => $nullPipes[] = $pipe,
                     PipeOrder::LAST => $lastPipes[] = $pipe,
@@ -90,7 +90,7 @@
             // so we can check if the name already exists.
 
             foreach ($pipes as $pipe) {
-                $this->pipe($pipe->callable, $pipe->name, $pipe->order);
+                $this->pipe($pipe->callable, $pipe->name, $pipe->pipeOrder);
             }
 
             return $this;
