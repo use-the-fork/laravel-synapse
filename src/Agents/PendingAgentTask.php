@@ -11,6 +11,7 @@ use UseTheFork\Synapse\Agents\PendingAgentTask\BootTraits;
 use UseTheFork\Synapse\Agents\PendingAgentTask\MergeProperties;
 use UseTheFork\Synapse\Exceptions\UnknownFinishReasonException;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 class PendingAgentTask
 {
@@ -101,6 +102,14 @@ class PendingAgentTask
                     throw new UnknownFinishReasonException("{$chatResponse->finishReason()} is not a valid finish reason.");
             }
         }
+    }
+
+    /**
+     * Execute the Complete Task pipeline.
+     */
+    public function executeCompleteTaskPipeline(AgentTaskResponse $response): AgentTaskResponse
+    {
+        return $this->middleware()->executeCompleteTaskPipeline($response);
     }
 
     /**

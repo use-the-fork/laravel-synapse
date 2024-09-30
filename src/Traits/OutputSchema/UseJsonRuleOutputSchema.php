@@ -6,10 +6,11 @@ namespace UseTheFork\Synapse\Traits\OutputSchema;
 
 use Illuminate\Support\Facades\Validator;
 use Throwable;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Response;
 use UseTheFork\Synapse\Traits\Agent\HasMiddleware;
 use UseTheFork\Synapse\ValueObject\Agent\Message;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
 /**
@@ -33,18 +34,18 @@ trait UseJsonRuleOutputSchema
 
     public function resolveOutputSchema(): array
     {
-        throw new \LogicException("You must set a `OutputSchema` please see `resolveOutputSchema` method.");
+        throw new \LogicException('You must set a `OutputSchema` please see `resolveOutputSchema` method.');
     }
 
     /**
      * Performs validation on the given response.
      *
-     * @param  Response  $response  The response to validate.
+     * @param  AgentTaskResponse  $response  The response to validate.
      * @return mixed If validation passes, it returns the validated response. Otherwise, it enters a loop and performs revalidation.
      *
      * @throws Throwable
      */
-    public function validateOutputSchema(Response $response): Response
+    public function validateOutputSchema(AgentTaskResponse $pendingAgentResponse): AgentTaskResponse
     {
 
         $outputSchema = [];
@@ -52,13 +53,18 @@ trait UseJsonRuleOutputSchema
             $outputSchema[$rule->getName()] = $rule->getRules();
         });
 
+        $responseString = $pendingAgentResponse->response->content();
+
         while (true) {
-            $result = $this->parseResponse($response);
+            $result = $this->parseResponse($responseString);
             $errorsAsString = '';
             if (! empty($result)) {
                 $validator = Validator::make($result, $outputSchema);
                 if (! $validator->fails()) {
-                    return $validator->validated();
+
+                    $pendingAgentResponse->setFinalResponse($validator->validated());
+
+                    return $pendingAgentResponse;
                 }
 
                 $errors = $validator->errors()->toArray();
@@ -67,9 +73,7 @@ trait UseJsonRuleOutputSchema
                 }, []);
                 $errorsAsString = "### Here are the errors that Failed validation \n".implode("\n", $errorsFlat)."\n\n";
             }
-            $response = $this->doRevalidate($response, $errorsAsString);
-            //since all integrations return a Message value object we need to grab the content
-            $response = $response->content();
+            $responseString = $this->doRevalidate($responseString, $errorsAsString);
         }
     }
 
@@ -100,6 +104,7 @@ trait UseJsonRuleOutputSchema
      */
     protected function doRevalidate(string $result, string $errors = ''): mixed
     {
+        dd($result);
 
         $prompt = view('synapse::Prompts.ReValidateResponsePrompt', [
             'outputRules' => $this->getOutputSchema(),
@@ -144,7 +149,7 @@ trait UseJsonRuleOutputSchema
 
         $outputSchema = "```json\n".json_encode($outputParserPromptPart, JSON_PRETTY_PRINT)."\n```";
 
-        $pendingAgentTask->addInput('outputSchema', $outputSchema,);
+        $pendingAgentTask->addInput('outputSchema', $outputSchema);
 
         return $pendingAgentTask;
     }
@@ -156,7 +161,7 @@ trait UseJsonRuleOutputSchema
     {
 
         $this->outputSchema = $this->resolveOutputSchema();
-        $this->middleware()->onStartTask(fn() => $this->setOutputSchema($pendingAgentTask), 'outputSchema');
+        $this->middleware()->onStartTask(fn () => $this->setOutputSchema($pendingAgentTask), 'outputSchema');
+        $this->middleware()->onCompleteTask(fn (AgentTaskResponse $response) => $this->validateOutputSchema($response), 'outputSchema');
     }
-
 }

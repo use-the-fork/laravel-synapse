@@ -18,6 +18,7 @@ use UseTheFork\Synapse\Agents\PendingAgentTask;
 use UseTheFork\Synapse\Contracts\Agent\HasIntegration;
 use UseTheFork\Synapse\ValueObject\Agent\Message;
 use UseTheFork\Synapse\ValueObject\Agent\Response;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 
 // implementation of https://github.com/bootstrapguru/dexor/blob/main/app/Integrations/OpenAI/OpenAIConnector.php
 class OpenAIConnector extends Connector implements HasIntegration
@@ -34,9 +35,8 @@ class OpenAIConnector extends Connector implements HasIntegration
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleCompletion(PendingAgentTask $pendingAgentTask): Response
+    public function handleCompletion(PendingAgentTask $pendingAgentTask): AgentTaskResponse
     {
-
         return $this->send(new ChatRequest($pendingAgentTask->getTask()->compilePrompt($pendingAgentTask->getInputs()), $pendingAgentTask->getTools(), $pendingAgentTask->getExtraAgentArgs()))->dto();
     }
 
@@ -50,7 +50,7 @@ class OpenAIConnector extends Connector implements HasIntegration
      * @throws FatalRequestException
      * @throws RequestException
      */
-    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): Response
+    public function handleValidationCompletion(PendingAgentTask $pendingAgentTask): AgentTaskResponse
     {
         return $this->send(new ValidateOutputRequest($message, $extraAgentArgs))->dto();
     }

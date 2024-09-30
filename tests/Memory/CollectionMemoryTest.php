@@ -7,7 +7,7 @@ declare(strict_types=1);
     use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
     use UseTheFork\Synapse\Agents\Task;
     use UseTheFork\Synapse\Contracts\Memory\HasMemory;
-    use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+    use UseTheFork\Synapse\Contracts\OutputSchema\HasTools;
     use UseTheFork\Synapse\Traits\Memory\UseCollectionMemory;
     use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
     use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
@@ -23,7 +23,7 @@ declare(strict_types=1);
 		}
 	}
 
-    class CollectionMemoryTask extends Task implements HasOutputSchema
+    class CollectionMemoryTask extends Task implements HasTools
     {
 
 //        use UseCollectionMemory;

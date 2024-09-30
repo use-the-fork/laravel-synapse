@@ -7,15 +7,15 @@ namespace UseTheFork\Synapse\Traits\Agent;
 use LogicException;
 use Saloon\Exceptions\Request\FatalRequestException;
 use Saloon\Exceptions\Request\RequestException;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Response;
 use UseTheFork\Synapse\Agents\Task;
 
 trait InvokesRequests
 {
     use UseIntegration;
 
-    public function invoke(array $input, Task $task): Response
+    public function invoke(array $input, Task $task): AgentTaskResponse
     {
 
         try {
@@ -26,18 +26,10 @@ trait InvokesRequests
 
             $response = $this->integration()->handleCompletion($pendingAgentTask);
 
-            dd($response);
-
-            //                if ($pendingAgentTask->hasFakeResponse()) {
-            //                    $response = $this->createFakeResponse($pendingAgentTask);
-            //                } else {
-            //                    $response = $this->integration()->handleCompletion($pendingAgentTask);
-            //                }
-
             // We'll execute the response pipeline now so that all the response
             // middleware can be run before we throw any exceptions.
 
-            $response = $pendingAgentRequest->executeResponsePipeline($response);
+            $response = $pendingAgentTask->executeCompleteTaskPipeline($response);
 
             return $response;
         } catch (FatalRequestException|RequestException $exception) {

@@ -9,6 +9,7 @@ use Saloon\Enums\Method;
 use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Saloon\Traits\Body\HasJsonBody;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 use UseTheFork\Synapse\Tools\ValueObjects\ToolCallValueObject;
 use UseTheFork\Synapse\ValueObject\Agent\Message;
 use UseTheFork\Synapse\ValueObject\Agent\Response as IntegrationResponse;
@@ -132,7 +133,7 @@ class ChatRequest extends Request implements HasBody
         return $payload;
     }
 
-    public function createDtoFromResponse(Response $response): IntegrationResponse
+    public function createDtoFromResponse(Response $response): AgentTaskResponse
     {
         $data = $response->array();
         $message = $data['choices'][0]['message'] ?? [];
@@ -145,6 +146,9 @@ class ChatRequest extends Request implements HasBody
             $message['role'] = Role::TOOL;
         }
 
-        return IntegrationResponse::makeOrNull($message);
+        return new AgentTaskResponse(
+            response: IntegrationResponse::makeOrNull($message),
+            rawResponse: $response->body()
+        );
     }
 }

@@ -8,9 +8,9 @@ To get started, you will need to add the `HasOutputSchema` interface to your age
 ```php
 <?php
 
-use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;use UseTheFork\Synapse\Contracts\OutputSchema\HasTools;
 
-class SimpleAgent extends Agent implements HasOutputSchema
+class SimpleAgent extends Agent implements HasTools
 {
 
     public function resolvePromptView(): string
@@ -32,9 +32,9 @@ You would then add the `resolveOutputSchema` method and have it return an array 
 ```php
 <?php
 
-use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;use UseTheFork\Synapse\Contracts\OutputSchema\HasOutputSchema;
+use UseTheFork\Synapse\Agents\Agent;use UseTheFork\Synapse\Agents\Integrations\Contracts\Integration;use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIIntegration;use UseTheFork\Synapse\Contracts\OutputSchema\HasTools;
 
-class SimpleAgent extends Agent implements HasOutputSchema
+class SimpleAgent extends Agent implements HasTools
 {
 
     public function resolvePromptView(): string

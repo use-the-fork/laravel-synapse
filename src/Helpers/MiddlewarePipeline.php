@@ -6,20 +6,21 @@ namespace UseTheFork\Synapse\Helpers;
 
 use Saloon\Enums\PipeOrder;
 use Saloon\Exceptions\Request\FatalRequestException;
-use Saloon\Http\Response;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
+use UseTheFork\Synapse\ValueObject\Agent\Response;
 
 class MiddlewarePipeline
 {
     /**
-     * Request Pipeline
+     * Start Task Pipeline
      */
     protected Pipeline $startTaskPipeline;
 
     /**
-     * Response Pipeline
+     * Complete Task Pipeline
      */
-    protected Pipeline $responsePipeline;
+    protected Pipeline $completeTaskPipeline;
 
     /**
      * Fatal Pipeline
@@ -32,7 +33,7 @@ class MiddlewarePipeline
     public function __construct()
     {
         $this->startTaskPipeline = new Pipeline;
-        $this->responsePipeline = new Pipeline;
+        $this->completeTaskPipeline = new Pipeline;
         $this->fatalPipeline = new Pipeline;
     }
 
@@ -58,12 +59,12 @@ class MiddlewarePipeline
     }
 
     /**
-     * Add a middleware after the request is sent
+     * Add a middleware after the Agent responds with a final answer.
      *
-     * @param  callable(\Saloon\Http\Response): (\Saloon\Http\Response|void)  $callable
+     * @param  callable(AgentTaskResponse): (AgentTaskResponse|void)  $callable
      * @return $this
      */
-    public function onTaskComplete(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
+    public function onCompleteTask(callable $callable, ?string $name = null, ?PipeOrder $order = null): static
     {
         /**
          * For some reason, PHP is not destructing non-static Closures, or 'things' using non-static Closures, correctly, keeping unused objects intact.
@@ -75,10 +76,10 @@ class MiddlewarePipeline
          * Do note that this is entirely about our *wrapping* Closure below.
          * The provided callable doesn't affect the MiddlewarePipeline.
          */
-        $this->responsePipeline->pipe(static function (Response $response) use ($callable): Response {
+        $this->completeTaskPipeline->pipe(static function (AgentTaskResponse $response) use ($callable): AgentTaskResponse {
             $result = $callable($response);
 
-            return $result instanceof Response ? $result : $response;
+            return $result instanceof AgentTaskResponse ? $result : $response;
         }, $name, $order);
 
         return $this;
@@ -120,11 +121,11 @@ class MiddlewarePipeline
     }
 
     /**
-     * Process the response pipeline.
+     * Process the complete task pipeline.
      */
-    public function executeResponsePipeline(Response $response): Response
+    public function executeCompleteTaskPipeline(AgentTaskResponse $response): AgentTaskResponse
     {
-        return $this->responsePipeline->process($response);
+        return $this->completeTaskPipeline->process($response);
     }
 
     /**
@@ -144,14 +145,14 @@ class MiddlewarePipeline
      */
     public function merge(MiddlewarePipeline $middlewarePipeline): static
     {
-        $requestPipes = array_merge(
+        $startTaskPipes = array_merge(
             $this->getStartTaskPipelinePipeline()->getPipes(),
             $middlewarePipeline->getStartTaskPipelinePipeline()->getPipes()
         );
 
-        $responsePipes = array_merge(
-            $this->getResponsePipeline()->getPipes(),
-            $middlewarePipeline->getResponsePipeline()->getPipes()
+        $completeTaskPipes = array_merge(
+            $this->getCompleteTaskPipelinePipeline()->getPipes(),
+            $middlewarePipeline->getCompleteTaskPipelinePipeline()->getPipes()
         );
 
         $fatalPipes = array_merge(
@@ -159,8 +160,8 @@ class MiddlewarePipeline
             $middlewarePipeline->getFatalPipeline()->getPipes()
         );
 
-        $this->startTaskPipeline->setPipes($requestPipes);
-        $this->responsePipeline->setPipes($responsePipes);
+        $this->startTaskPipeline->setPipes($startTaskPipes);
+        $this->completeTaskPipeline->setPipes($completeTaskPipes);
         $this->fatalPipeline->setPipes($fatalPipes);
 
         return $this;
@@ -177,9 +178,9 @@ class MiddlewarePipeline
     /**
      * Get the response pipeline
      */
-    public function getResponsePipeline(): Pipeline
+    public function getCompleteTaskPipelinePipeline(): Pipeline
     {
-        return $this->responsePipeline;
+        return $this->completeTaskPipeline;
     }
 
     /**

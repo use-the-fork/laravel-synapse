@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace UseTheFork\Synapse\Contracts\OutputSchema;
 
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
 use UseTheFork\Synapse\Agents\PendingAgentTask;
-use UseTheFork\Synapse\Agents\Response;
 
 interface HasOutputSchema
 {
@@ -13,5 +13,5 @@ interface HasOutputSchema
 
     public function setOutputSchema(PendingAgentTask $pendingAgentTask): PendingAgentTask;
 
-    public function validateOutputSchema(Response $response): Response;
+    public function validateOutputSchema(AgentTaskResponse $response): AgentTaskResponse;
 }
