@@ -49,10 +49,7 @@ trait InvokesRequests
 
             // We'll execute the response pipeline now so that all the response
             // middleware can be run before we throw any exceptions.
-
             $response = $pendingAgentTask->executeCompleteTaskPipeline($pendingAgentTask->currentTaskResponse());
-            dd($response);
-
             return $response;
         } catch (FatalRequestException|RequestException $exception) {
             // We'll attempt to get the response from the exception. We'll only be able

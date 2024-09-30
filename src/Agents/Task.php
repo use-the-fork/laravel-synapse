@@ -5,7 +5,6 @@
     namespace UseTheFork\Synapse\Agents;
 
 
-    use UseTheFork\Synapse\Agents\Enums\PromptType;
     use UseTheFork\Synapse\Contracts\Agent\Task\HasMemory;
     use UseTheFork\Synapse\Contracts\Tools\Tool;
     use UseTheFork\Synapse\Exceptions\InvalidArgumentException;
@@ -15,7 +14,6 @@
     use UseTheFork\Synapse\Traits\Bootable;
     use UseTheFork\Synapse\Traits\Makeable;
     use UseTheFork\Synapse\ValueObject\Agent\Message;
-    use UseTheFork\Synapse\ValueObject\Agent\Role;
 
     abstract class Task implements HasMemory
     {
@@ -24,11 +22,6 @@
         use HasMiddleware;
         use UseMemory;
         use UseTools;
-
-        /**
-         * The view to use when generating the prompt for this agent
-         */
-        protected PromptType $promptType;
 
         /**
          * The view to use when generating the prompt for this agent.
@@ -42,28 +35,7 @@
 
         public function compilePrompt(array $inputs): array
         {
-            return match ($this->promptType) {
-                PromptType::COMPLETION => $this->handleCompletionPrompt($inputs),
-                PromptType::CHAT => $this->handleChatPrompt($inputs),
-                default => throw new \InvalidArgumentException('Invalid prompt type'),
-            };
-        }
-
-        public function handleCompletionPrompt(array $inputs): array
-        {
-            if (isset($inputs['image'])) {
-                $inputs['image'] = base64_encode(json_encode($inputs['image']));
-            }
-
-            $compilePromptAsString = $this->compilePromptFromView($inputs);
-
-            // The whole document is a prompt
-            $prompts[] = Message::make([
-                                           'role' => Role::USER,
-                                           'content' => trim($compilePromptAsString),
-                                       ]);
-
-            return $prompts;
+            return $this->handleChatPrompt($inputs);
         }
 
         public function handleChatPrompt(array $inputs): array
@@ -117,12 +89,5 @@
                 ...$inputs,
             ])->render();
         }
-
-        public function getPromptType(): string
-        {
-            return $this->promptType->value;
-        }
-
-
 
     }

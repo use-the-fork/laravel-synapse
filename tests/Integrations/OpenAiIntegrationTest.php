@@ -2,23 +2,22 @@
 
 declare(strict_types=1);
 
-    use Saloon\Http\Faking\MockClient;
-    use Saloon\Http\Faking\MockResponse;
-    use Saloon\Http\PendingRequest;
-    use UseTheFork\Synapse\Agents\Agent;
-    use UseTheFork\Synapse\Agents\AgentTaskResponse;
-    use UseTheFork\Synapse\Agents\Enums\PromptType;
-    use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
-    use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
-    use UseTheFork\Synapse\Agents\Task;
-    use UseTheFork\Synapse\Contracts\Agent\Task\HasOutputSchema;
-    use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
-    use UseTheFork\Synapse\Tools\SerperTool;
-    use UseTheFork\Synapse\Traits\Memory\UseCollectionMemory;
-    use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
-    use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
+use Saloon\Http\Faking\MockClient;
+use Saloon\Http\Faking\MockResponse;
+use Saloon\Http\PendingRequest;
+use UseTheFork\Synapse\Agents\Agent;
+use UseTheFork\Synapse\Agents\AgentTaskResponse;
+use UseTheFork\Synapse\Agents\Enums\PromptType;
+use UseTheFork\Synapse\Agents\Integrations\OpenAI\OpenAIConnector;
+use UseTheFork\Synapse\Agents\Integrations\OpenAI\Requests\ChatRequest;
+use UseTheFork\Synapse\Agents\Task;
+use UseTheFork\Synapse\Contracts\Agent\Task\HasOutputSchema;
+use UseTheFork\Synapse\Services\Serper\Requests\SerperSearchRequest;
+use UseTheFork\Synapse\Tools\SerperTool;
+use UseTheFork\Synapse\Traits\OutputSchema\UseJsonRuleOutputSchema;
+use UseTheFork\Synapse\ValueObject\OutputSchema\SchemaRule;
 
-    test('Connects', function (): void {
+test('Connects', function (): void {
 
     class OpenAiTestAgent extends Agent
     {
@@ -30,7 +29,6 @@ declare(strict_types=1);
 
     class OpenAiTestTask extends Task implements HasOutputSchema
     {
-        use UseCollectionMemory;
         use UseJsonRuleOutputSchema;
 
         protected PromptType $promptType = PromptType::CHAT;
@@ -63,10 +61,10 @@ declare(strict_types=1);
 
     $agent = new OpenAiTestAgent;
     $task = new OpenAiTestTask;
-    $agentResponse = $agent->invoke(['input' => 'hello!'], $task);
+    $agentTaskResponse = $agent->invoke(['input' => 'hello!'], $task);
 
-    expect($agentResponse)->toBeInstanceOf(AgentTaskResponse::class)
-        ->and($agentResponse->getFinalResponse())->toHaveKey('answer');
+    expect($agentTaskResponse)->toBeInstanceOf(AgentTaskResponse::class)
+        ->and($agentTaskResponse->getFinalResponse())->toHaveKey('answer');
 });
 
 test('Uses Tools', function (): void {
@@ -82,8 +80,6 @@ test('Uses Tools', function (): void {
     class OpenAiTestToolTask extends Task implements HasOutputSchema
     {
         use UseJsonRuleOutputSchema;
-
-        protected PromptType $promptType = PromptType::CHAT;
 
         public function resolvePromptView(): string
         {
@@ -120,8 +116,8 @@ test('Uses Tools', function (): void {
 
     $agent = new OpenAiTestAgent;
     $task = new OpenAiTestToolTask;
-    $agentResponse = $agent->invoke(['input' => 'search google for the current president of the united states.'], $task);
+    $agentTaskResponse = $agent->invoke(['input' => 'search google for the current president of the united states.'], $task);
 
-    expect($agentResponse)->toBeArray()
-        ->and($agentResponse)->toHaveKey('answer');
+    expect($agentTaskResponse->getFinalResponse())->toBeArray()
+        ->and($agentTaskResponse->getFinalResponse())->toHaveKey('answer');
 });
